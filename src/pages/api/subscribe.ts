@@ -15,11 +15,12 @@ export async function POST({ request }) {
       "Content-Type": "application/json",
       "Authorization": `Token ${API_KEY}`
     },
-    body: JSON.stringify({ email })
+    body: JSON.stringify({ email_address: email })
   });
 
+  const errBody = await res.json().catch(() => ({}));
   if (!res.ok) {
-    return new Response(JSON.stringify({ ok: false, error: "Buttondown error" }), { status: 500 });
+    return new Response(JSON.stringify({ ok: false, error: errBody.detail || "Buttondown error" }), { status: 500 });
   }
 
   return new Response(JSON.stringify({ ok: true }));
