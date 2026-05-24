@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../lib/constants";
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_KEYWORDS } from "../lib/constants";
 
 export interface Props {
   title?: string;
@@ -12,39 +12,79 @@ export interface Props {
 const { title, description, image, noIndex } = Astro.props;
 const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
 const pageDesc = description || SITE_DESCRIPTION;
+
+const siteUrl = "https://airquality.epa.ie";
+const defaultImage = image || `${siteUrl}/og-image.png`;
 ---
 
 <!doctype html>
-<html lang="en" class="h-full">
+<html lang="en-IE" class="h-full">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDesc} />
-    {noIndex && <meta name="robots" content="noindex" />}
+    <meta name="keywords" content={SITE_KEYWORDS} />
+    {noIndex ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    )}
     <link rel="canonical" href={Astro.url} />
+    <link rel="alternate" hreflang="en-IE" href={Astro.url} />
+    <link rel="alternate" hreflang="x-default" href={siteUrl} />
 
     <link rel="preconnect" href="https://eeadmz1-downloads-api-appservice.azurewebsites.net" />
     <link rel="preconnect" href="https://tile.openstreetmap.org" />
 
+    <meta name="google-site-verification" content="hUrS2Fv_4uU33Hz7Kh6_Vd9kA_0Jrq3b9PrLXCHpO3k" />
     <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
 
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
-    {image && <meta property="og:image" content={image} />}
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta property="og:locale" content="en_IE" />
+    <meta property="og:image" content={defaultImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
-    {pageDesc && <meta name="twitter:card" content="summary" />}
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDesc} />
+    <meta name="twitter:image" content={defaultImage} />
 
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: SITE_TITLE,
-      url: "https://airquality.epa.ie",
-      description: SITE_DESCRIPTION,
+      "@graph": [
+        {
+          "@type": "WebSite",
+          name: SITE_TITLE,
+          url: siteUrl,
+          description: SITE_DESCRIPTION,
+          keywords: SITE_KEYWORDS,
+          inLanguage: "en-IE",
+        },
+        {
+          "@type": "Dataset",
+          name: "EEA E2a Real-Time Air Quality — Ireland",
+          description: "Up-to-date unverified air quality measurements from the European Environment Agency Air Quality e-Reporting system (E2a dataset). Includes PM2.5, PM10, NO2, O3, SO2, CO, benzene, and BaP readings from Irish monitoring stations.",
+          url: `${siteUrl}/`,
+          temporalCoverage: "2024-01-01/2026-12-31",
+          measurementTechnique: "Automated monitoring stations reporting to EEA Air Quality e-Reporting (E2a)",
+          keywords: SITE_KEYWORDS,
+          inLanguage: "en-IE",
+          isAccessibleForFree: true,
+          distribution: [
+            {
+              "@type": "DataDownload",
+              contentUrl: "https://eeadmz1-downloads-api-appservice.azurewebsites.net",
+              encodingFormat: "application/json",
+            },
+          ],
+        },
+      ],
     })}>
     </script>
   </head>

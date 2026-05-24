@@ -53,21 +53,34 @@ if (hasData) {
     return { m, info, band, withinLimit };
   });
 
+  const siteUrl = "https://airquality.epa.ie";
   structuredData = {
     "@context": "https://schema.org",
-    "@type": "Dataset",
-    name: `Air Quality Readings - ${station.StationName}`,
-    description: `Real-time air quality measurements from ${station.StationName}, a ${station.StationType} monitoring station in ${station.StationArea} area of Ireland.`,
-    spatial: {
-      "@type": "Place",
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: station.Latitude,
-        longitude: station.Longitude,
+    "@graph": [
+      {
+        "@type": "WebSite",
+        name: "Air Quality Ireland — Live AQI, PM2.5, PM10, Pollution Levels",
+        url: siteUrl,
       },
-    },
-    temporalCoverage: lastUpdated,
-    measurementTechnique: "EEA Air Quality e-Reporting",
+      {
+        "@type": "Dataset",
+        name: `Air Quality Readings - ${station.StationName}`,
+        description: `Real-time air quality measurements from ${station.StationName}, a ${station.StationType} monitoring station in ${station.StationArea} area of Ireland. Current AQI: ${aqiLabel}.`,
+        url: `${siteUrl}/station/${station.AirQualityStationEoICode}/`,
+        spatial: {
+          "@type": "Place",
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: station.Latitude,
+            longitude: station.Longitude,
+          },
+        },
+        temporalCoverage: lastUpdated,
+        measurementTechnique: "EEA Air Quality e-Reporting",
+        inLanguage: "en-IE",
+        isAccessibleForFree: true,
+      },
+    ],
   };
 }
 ---

@@ -30,6 +30,13 @@ const poorPlus = stations.filter((s) => s.aqi >= 4).length;
 
 <DataPageLayout title="Current Air Quality — Ireland" description="Real-time air quality readings across Ireland. Map and list view of all active monitoring stations with European Air Quality Index." lastUpdated={lastUpdated} buildTimestamp={buildTimestamp}>
   <div class="space-y-8">
+    <section aria-labelledby="intro-heading" class="text-center space-y-2">
+      <h2 id="intro-heading" class="text-xl font-semibold text-gray-800">Real-time air quality in Ireland</h2>
+      <p class="text-sm text-gray-600 max-w-2xl mx-auto">
+        Live AQI for Dublin, Cork, Galway. PM2.5 and PM10 pollution levels updated hourly from official EEA monitoring stations across Ireland.
+      </p>
+    </section>
+
     <section aria-labelledby="map-heading">
       <h2 id="map-heading" class="sr-only">Air quality map of Ireland</h2>
       <CurrentConditionsMap stations={stations} />

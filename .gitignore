@@ -12,7 +12,7 @@ src/data/validated.parquet
 src/data/stations.parquet
 src/data/*.json
 !src/data/current.json
-public/sitemap.xml
+# public/sitemap.xml — tracked so new clones have a baseline sitemap
 !.gitkeep
 
 # wrangler files

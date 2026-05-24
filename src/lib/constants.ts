@@ -1,6 +1,8 @@
-export const SITE_TITLE = "Ireland Air Quality Monitor";
+export const SITE_TITLE = "Air Quality Ireland — Live AQI, PM2.5, PM10, Pollution Levels";
 export const SITE_DESCRIPTION =
-  "Real-time and historical air quality data for Ireland from the European Environment Agency and EPA Ireland.";
+  "Real-time air quality data for Ireland. Live AQI, PM2.5, PM10, NO2, O3 and pollution levels from official monitoring stations. Updated hourly.";
+export const SITE_KEYWORDS =
+  "air quality ireland, aqi ireland, pm2.5 ireland, pollution dublin, air quality monitor, real time air quality, irish air pollution, live aqi, pm10 ireland, no2 levels, ozone monitoring";
 
 export const EEA_API_BASE = "https://eeadmz1-downloads-api-appservice.azurewebsites.net";
 export const EPA_STATION_REGISTRY =
