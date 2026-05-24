@@ -14,3 +14,9 @@ src/data/*.json
 !src/data/current.json
 public/sitemap.xml
 !.gitkeep
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
