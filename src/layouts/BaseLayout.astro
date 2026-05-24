@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_KEYWORDS, BUY_ME_A_COFFEE_URL } from "../lib/constants";
+import { formatTimestamp } from "../lib/format";
 
 export interface Props {
   title?: string;
@@ -15,6 +16,16 @@ const pageDesc = description || SITE_DESCRIPTION;
 
 const siteUrl = "https://airquality.epa.ie";
 const defaultImage = image || `${siteUrl}/og-image.png`;
+
+let buildTimestamp = "";
+try {
+  const mod = await import("../data/current.json");
+  const data = mod.default || mod;
+  buildTimestamp = data.buildTimestamp || "";
+} catch {
+  // no data yet
+}
+const footerLastUpdated = buildTimestamp ? formatTimestamp(buildTimestamp) : "pending first data fetch";
 ---
 
 <!doctype html>
@@ -92,20 +103,20 @@ const defaultImage = image || `${siteUrl}/og-image.png`;
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <header class="bg-white border-b border-gray-200" role="banner">
-      <div class="container-main flex items-center justify-between h-16">
-        <a href="/" class="flex items-center gap-2 font-semibold text-lg hover:text-blue-700 transition-colors">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+      <div class="container-main flex items-center justify-between h-14 sm:h-16">
+        <a href="/" class="flex items-center gap-1.5 sm:gap-2 font-semibold text-sm sm:text-lg hover:text-blue-700 transition-colors min-w-0 flex-shrink-0">
+          <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true" class="w-5 h-5 sm:w-7 sm:h-7 flex-shrink-0">
             <circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="2"/>
             <circle cx="14" cy="14" r="4" fill="currentColor"/>
           </svg>
-          <span>Air Quality Ireland</span>
+          <span class="whitespace-nowrap overflow-hidden text-ellipsis">Air Quality Ireland</span>
         </a>
 
-        <nav aria-label="Main navigation" class="flex items-center gap-5">
-          <a href="/" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Dashboard</a>
-          <a href="/how-aqi-works/" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">How AQI Works</a>
-          <a href="/methodology/" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Methodology</a>
-          <a href="/about/" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">About</a>
+        <nav aria-label="Main navigation" class="flex items-center gap-1 sm:gap-2 md:gap-5 overflow-hidden">
+          <a href="/" class="text-[11px] sm:text-xs md:text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors whitespace-nowrap px-1">Dashboard</a>
+          <a href="/how-aqi-works/" class="text-[11px] sm:text-xs md:text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors whitespace-nowrap px-1 hidden sm:inline">How AQI Works</a>
+          <a href="/methodology/" class="text-[11px] sm:text-xs md:text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors whitespace-nowrap px-1">Methodology</a>
+          <a href="/about/" class="text-[11px] sm:text-xs md:text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors whitespace-nowrap px-1">About</a>
         </nav>
       </div>
     </header>
@@ -114,8 +125,8 @@ const defaultImage = image || `${siteUrl}/og-image.png`;
       <slot />
     </main>
 
-    <footer class="bg-gray-50 border-t border-gray-200 mt-12" role="contentinfo">
-      <div class="container-main py-8 space-y-4">
+    <footer class="bg-gray-50 border-t-2 border-gray-200 mt-12" role="contentinfo">
+      <div class="container-main py-10 space-y-8">
         <div class="disclaimer-banner">
           <p class="text-sm">
             <strong>Data disclaimer:</strong> Air quality data from the European Environment Agency (EEA) Air Quality e-Reporting system and the Environmental Protection Agency (EPA) Ireland. Real-time data is unverified and subject to revision.
@@ -124,19 +135,53 @@ const defaultImage = image || `${siteUrl}/og-image.png`;
             <strong>Medical disclaimer:</strong> This site is for informational purposes only and does not provide medical or legal advice. For health concerns, consult a medical professional.
           </p>
         </div>
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Ireland Air Quality Monitor. Data: EEA and EPA Ireland.</p>
-          <div class="flex items-center gap-4">
-            <nav aria-label="Footer navigation" class="flex gap-4">
-              <a href="/how-aqi-works/" class="hover:text-gray-700 underline underline-offset-2">How AQI Works</a>
-              <a href="/methodology/" class="hover:text-gray-700 underline underline-offset-2">Methodology</a>
-              <a href="/about/" class="hover:text-gray-700 underline underline-offset-2">About</a>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-sm">
+          <div class="space-y-2">
+            <h3 class="font-semibold text-gray-800">About AirQMon</h3>
+            <p class="text-gray-500 leading-relaxed">
+              Real-time air quality monitoring for Ireland using official EEA and EPA data. Live AQI, PM2.5, PM10, NO2 and ozone levels from monitoring stations nationwide.
+            </p>
+            <div class="flex items-center gap-3 pt-1">
+              <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-600 transition-colors" aria-label="Follow on X / Twitter">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+              <a href="https://github.com/code7Dummy/AirQMon" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-600 transition-colors" aria-label="View source on GitHub">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+              <a href="mailto:hello@airquality.epa.ie" class="text-gray-400 hover:text-gray-600 transition-colors" aria-label="Send email">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <h3 class="font-semibold text-gray-800">Quick Links</h3>
+            <nav aria-label="Footer navigation" class="flex flex-col gap-2">
+              <a href="/" class="text-gray-500 hover:text-gray-700 transition-colors">Dashboard</a>
+              <a href="/how-aqi-works/" class="text-gray-500 hover:text-gray-700 transition-colors">How AQI Works</a>
+              <a href="/methodology/" class="text-gray-500 hover:text-gray-700 transition-colors">Methodology</a>
+              <a href="/about/" class="text-gray-500 hover:text-gray-700 transition-colors">About</a>
             </nav>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="font-semibold text-gray-800">Support</h3>
             <a href={BUY_ME_A_COFFEE_URL} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-800 rounded-lg text-xs font-medium hover:bg-amber-100 transition-colors" aria-label="Support the project on Buy Me a Coffee">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 4H3v2h18V4zm-3 4H6v8c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8zm-4 5H10v-2h4v2z"/></svg>
               Support the Project
             </a>
+            <p class="text-xs text-gray-400">
+              Data refreshes every 6 hours from the EEA.
+            </p>
+            <p class="text-xs text-gray-400">
+              Last data fetch: {footerLastUpdated}
+            </p>
           </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-6 text-xs text-gray-400 text-center sm:text-left">
+          <p>&copy; {new Date().getFullYear()} AirQMon — Ireland Air Quality Monitor. Data: EEA and EPA Ireland.</p>
         </div>
       </div>
     </footer>
