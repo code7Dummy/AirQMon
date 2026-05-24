@@ -17,7 +17,7 @@ const hasStations = stations.length > 0;
   @media (max-width: 639px) {
     #aqi-map-wrapper {
       pointer-events: none;
-      touch-action: none;
+      touch-action: pan-y;
     }
     #aqi-map-wrapper.touch-active {
       pointer-events: auto;
@@ -26,14 +26,14 @@ const hasStations = stations.length > 0;
   }
 </style>
 
-<div class="space-y-2 mt-4 sm:mt-0">
-  <div id="aqi-map-wrapper" class="relative">
+<div class="space-y-1.5 mt-4 sm:mt-2 px-3 sm:px-0 max-w-4xl mx-auto">
+  <div id="aqi-map-wrapper" class="relative shadow-sm sm:shadow-none rounded-lg">
     <div id="aqi-map-tap-overlay" class="absolute inset-0 z-20 flex items-end justify-center pb-4 pointer-events-auto sm:hidden">
       <span class="bg-white/90 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-full shadow-sm backdrop-blur-sm">
         Tap to explore map
       </span>
     </div>
-    <div id="aqi-map" class="w-full rounded-lg border border-gray-200 relative max-h-[350px] sm:max-h-none" style="height: 500px" role="application" aria-label="Air quality map of Ireland with station markers colored by current AQI">
+    <div id="aqi-map" class="w-full rounded-lg border border-gray-200 relative max-h-[280px] sm:max-h-[420px] lg:max-h-[440px]" style="height: 440px" role="application" aria-label="Air quality map of Ireland with station markers colored by current AQI">
       <div id="map-skeleton" class="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-500 rounded-lg z-10">
         <div class="text-center space-y-2">
           <div class="inline-block w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
@@ -136,7 +136,7 @@ const hasStations = stations.length > 0;
         map.fitBounds(bounds, { padding: [30, 30], maxZoom: 10 });
       }
 
-      mapEl.style.height = "500px";
+      mapEl.style.height = "440px";
       window.dispatchEvent(new Event("resize"));
 
       if (overlayEl) {
