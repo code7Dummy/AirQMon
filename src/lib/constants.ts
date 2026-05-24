@@ -31,6 +31,7 @@ export const IRELAND_BOUNDS = {
 export const MAP_DEFAULT_CENTER: [number, number] = [53.35, -7.5];
 export const MAP_DEFAULT_ZOOM = 7;
 
+export const BUY_ME_A_COFFEE_URL = "https://www.buymeacoffee.com/";
 export const REFRESH_INTERVAL_HOURS = 6;
 export const DATA_SOURCES = [
   { name: "EEA Air Quality e-Reporting (E2a)", type: "Real-time unverified" },

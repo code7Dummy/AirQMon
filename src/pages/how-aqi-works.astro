@@ -1,0 +1,124 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="How AQI Works — Air Quality Index Explained"
+  description="Learn what AQI means, how PM2.5 and PM10 affect your health, how the EEA E2a data pipeline works, and why air quality data is preliminary."
+>
+  <div class="container-main py-8 max-w-3xl space-y-10">
+    <h1 class="text-3xl font-bold tracking-tight">How AQI Works</h1>
+    <p class="text-gray-600">The Air Quality Index (AQI) explained in plain language — what it measures, how it affects your health, and where the data comes from.</p>
+
+    <section aria-labelledby="what-is-aqi">
+      <h2 id="what-is-aqi" class="text-xl font-bold mb-3">What Is AQI?</h2>
+      <p class="text-gray-700">
+        The Air Quality Index (AQI) is a simple, colour-coded scale from 1 (Good) to 6 (Extremely Poor) that tells you how clean or polluted the air is. Instead of showing raw numbers for each pollutant, the AQI translates measurement data into a single index you can act on at a glance.
+      </p>
+      <p class="text-gray-700 mt-2">
+        Ireland uses the <strong>European Air Quality Index (2024)</strong> published by the European Environment Agency (EEA). The overall AQI for a station is determined by the <strong>worst-performing pollutant</strong> — that is, the pollutant with the highest individual index value.
+      </p>
+    </section>
+
+    <section aria-labelledby="what-is-pm25-pm10">
+      <h2 id="what-is-pm25-pm10" class="text-xl font-bold mb-3">What Is PM2.5 and PM10?</h2>
+      <div class="space-y-3 text-gray-700">
+        <p>
+          <strong>PM10</strong> (Particulate Matter ≤10 µm) refers to inhalable particles smaller than 10 micrometres in diameter. These particles can penetrate the lungs and are produced by road dust, construction, industrial processes, and agriculture.
+        </p>
+        <p>
+          <strong>PM2.5</strong> (Fine Particulate Matter ≤2.5 µm) refers to even finer particles — about 1/30th the width of a human hair. These particles are small enough to enter the bloodstream through the lungs. Major sources include diesel engines, heating, power generation, and industrial combustion.
+        </p>
+        <p>
+          Because PM2.5 can reach the bloodstream, it poses the <strong>greatest health risk</strong> among common air pollutants. The EU annual limit for PM2.5 is 5 µg/m³, and the WHO guideline is also 5 µg/m³.
+        </p>
+      </div>
+    </section>
+
+    <section aria-labelledby="health-impacts">
+      <h2 id="health-impacts" class="text-xl font-bold mb-3">Health Impacts</h2>
+      <div class="space-y-2 text-gray-700 text-sm">
+        <p>Short-term exposure to elevated AQI levels can cause:</p>
+        <ul class="list-disc list-inside space-y-1">
+          <li>Eye, nose, and throat irritation</li>
+          <li>Coughing and shortness of breath</li>
+          <li>Worsening of asthma symptoms</li>
+          <li>Increased risk of heart attack and stroke in vulnerable individuals</li>
+        </ul>
+        <p class="mt-2">Long-term exposure to PM2.5 is linked to:</p>
+        <ul class="list-disc list-inside space-y-1">
+          <li>Reduced lung function in children</li>
+          <li>Development of chronic respiratory disease</li>
+          <li>Increased cardiovascular mortality</li>
+          <li>Potential cognitive decline in older adults</li>
+        </ul>
+        <p class="mt-3 text-xs text-gray-500">
+          Sensitive groups include children, older adults, pregnant people, and those with respiratory or cardiovascular conditions.
+        </p>
+      </div>
+    </section>
+
+    <section aria-labelledby="other-pollutants">
+      <h2 id="other-pollutants" class="text-xl font-bold mb-3">Other Key Pollutants</h2>
+      <div class="space-y-2 text-sm text-gray-700">
+        <p><strong>Nitrogen Dioxide (NO₂)</strong> — Emitted primarily from road traffic and combustion. High levels can inflame airways and aggravate asthma. EU annual limit: 10 µg/m³.</p>
+        <p><strong>Ozone (O₃)</strong> — Ground-level ozone forms when pollutants react in sunlight. High concentrations can irritate the respiratory system. Common in summer. EU target value: 120 µg/m³.</p>
+        <p><strong>Sulphur Dioxide (SO₂)</strong> — Produced by burning fossil fuels. Can cause bronchoconstriction in asthma patients.</p>
+        <p><strong>Carbon Monoxide (CO)</strong> — Reduces the blood's ability to carry oxygen. Sources include traffic and heating.</p>
+        <p><strong>Benzene (C₆H₆)</strong> — A known carcinogen from traffic and industry. Long-term exposure carries cancer risk.</p>
+        <p><strong>Benzo[a]pyrene (BaP)</strong> — A polycyclic aromatic hydrocarbon and known carcinogen from combustion processes.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="eea-data">
+      <h2 id="eea-data" class="text-xl font-bold mb-3">How the EEA E2a Data Works</h2>
+      <p class="text-gray-700">
+        The EEA Air Quality e-Reporting system collects measurements from national monitoring networks across Europe, including the EPA Ireland network. There are two datasets:
+      </p>
+      <dl class="space-y-3 mt-3 text-sm">
+        <div class="border-l-4 border-blue-400 pl-3">
+          <dt class="font-semibold">E2a (Real-time, unverified)</dt>
+          <dd class="text-gray-600">Measurements reported within hours of collection. Used for current conditions on this site. Data has not passed formal quality assurance.</dd>
+        </div>
+        <div class="border-l-4 border-green-400 pl-3">
+          <dt class="font-semibold">E1a (Annual, verified)</dt>
+          <dd class="text-gray-600">Fully quality-assured data used for compliance checking against EU air quality standards. Typically published the following year.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section aria-labelledby="preliminary-data" class="disclaimer-banner">
+      <h2 id="preliminary-data" class="font-semibold mb-1">Why Data Is Preliminary</h2>
+      <p class="text-sm">
+        Current conditions on this site use the <strong>E2a dataset</strong>, which means readings are preliminary and have not undergone formal verification. Measurements may be revised when verified (E1a) data becomes available. This is standard practice for real-time air quality monitoring worldwide.
+      </p>
+    </section>
+
+    <section aria-labelledby="aqi-bands-ref">
+      <h2 id="aqi-bands-ref" class="text-xl font-bold mb-3">AQI Reference — 6 Bands</h2>
+      <div class="overflow-x-auto">
+        <table class="data-table text-sm" aria-label="AQI band reference table">
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Label</th>
+              <th>Colour</th>
+              <th>PM2.5 (µg/m³)</th>
+              <th>PM10 (µg/m³)</th>
+              <th>NO₂ (µg/m³)</th>
+              <th>O₃ (µg/m³)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: #50f0e620"><td>1</td><td>Good</td><td><span class="inline-block w-4 h-4 rounded" style="background:#50f0e6" aria-hidden="true"></span></td><td>0–10</td><td>0–20</td><td>0–40</td><td>0–50</td></tr>
+            <tr style="background: #50ccaa20"><td>2</td><td>Fair</td><td><span class="inline-block w-4 h-4 rounded" style="background:#50ccaa" aria-hidden="true"></span></td><td>10–20</td><td>20–40</td><td>40–90</td><td>50–100</td></tr>
+            <tr style="background: #f0e64120"><td>3</td><td>Moderate</td><td><span class="inline-block w-4 h-4 rounded" style="background:#f0e641" aria-hidden="true"></span></td><td>20–25</td><td>40–50</td><td>90–120</td><td>100–130</td></tr>
+            <tr style="background: #ff505020"><td>4</td><td>Poor</td><td><span class="inline-block w-4 h-4 rounded" style="background:#ff5050" aria-hidden="true"></span></td><td>25–50</td><td>50–100</td><td>120–230</td><td>130–240</td></tr>
+            <tr style="background: #96003220"><td>5</td><td>Very Poor</td><td><span class="inline-block w-4 h-4 rounded" style="background:#960032" aria-hidden="true"></span></td><td>50–75</td><td>100–150</td><td>230–340</td><td>240–380</td></tr>
+            <tr style="background: #7d218120"><td>6</td><td>Extremely Poor</td><td><span class="inline-block w-4 h-4 rounded" style="background:#7d2181" aria-hidden="true"></span></td><td>&gt;75</td><td>&gt;150</td><td>&gt;340</td><td>&gt;380</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

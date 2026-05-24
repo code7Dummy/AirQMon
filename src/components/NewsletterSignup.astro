@@ -1,0 +1,64 @@
+---
+const apiUrl = "/api/subscribe";
+---
+
+<section aria-labelledby="newsletter-heading" class="border border-gray-200 rounded-lg p-6 bg-gradient-to-br from-blue-50 to-white">
+  <h2 id="newsletter-heading" class="text-lg font-bold text-gray-800">Stay Informed</h2>
+  <p class="text-sm text-gray-600 mt-1">Get air quality alerts and updates in your inbox.</p>
+  <form id="newsletter-form" action={apiUrl} method="POST" class="mt-4 flex flex-col sm:flex-row gap-3">
+    <label for="newsletter-email" class="sr-only">Email address</label>
+    <input
+      id="newsletter-email"
+      name="email"
+      type="email"
+      required
+      placeholder="your@email.com"
+      class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+    />
+    <button type="submit" class="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+      Subscribe
+    </button>
+  </form>
+  <div id="newsletter-status" class="mt-3 text-sm hidden" role="status"></div>
+</section>
+
+<script>
+  (function () {
+    var form = document.getElementById("newsletter-form");
+    var status = document.getElementById("newsletter-status");
+    if (!form || !status) return;
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var emailInput = document.getElementById("newsletter-email");
+      var email = emailInput ? emailInput.value.trim() : "";
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        status.className = "mt-3 text-sm text-red-600";
+        status.textContent = "Please enter a valid email address.";
+        status.classList.remove("hidden");
+        return;
+      }
+      status.className = "mt-3 text-sm text-gray-500";
+      status.textContent = "Submitting...";
+      status.classList.remove("hidden");
+      try {
+        var res = await fetch("/api/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email }),
+        });
+        if (res.ok) {
+          status.className = "mt-3 text-sm text-green-700";
+          status.textContent = "Thanks for subscribing! We'll keep you posted.";
+          form.querySelector("input").value = "";
+        } else {
+          status.className = "mt-3 text-sm text-red-600";
+          status.textContent = "Something went wrong. Please try again.";
+        }
+      } catch {
+        status.className = "mt-3 text-sm text-red-600";
+        status.textContent = "Network error. Please check your connection.";
+      }
+    });
+  })();
+</script>
