@@ -1,0 +1,121 @@
+---
+import type { StationCurrentData } from "../lib/types";
+
+export interface Props {
+  stations: StationCurrentData[];
+}
+
+const { stations } = Astro.props;
+const stationsJson = JSON.stringify(stations);
+const hasStations = stations.length > 0;
+---
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+<div class="space-y-2">
+  <div id="aqi-map" class="w-full rounded-lg border border-gray-200 relative" style="height: 500px" role="application" aria-label="Air quality map of Ireland with station markers colored by current AQI">
+    <div id="map-skeleton" class="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-500 rounded-lg z-10">
+      <div class="text-center space-y-2">
+        <div class="inline-block w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
+        <p class="text-sm">Loading map...</p>
+      </div>
+    </div>
+    <noscript>
+      <div class="flex items-center justify-center h-full bg-gray-100 text-gray-500 p-4 rounded-lg">
+        <p>Map requires JavaScript. View the <a href="#station-list" class="underline text-blue-600">station list below</a> instead.</p>
+      </div>
+    </noscript>
+  </div>
+  <p class="text-xs text-gray-400">
+    Map tiles &copy; <a href="https://www.openstreetmap.org/copyright" class="underline">OpenStreetMap contributors</a>.
+    Station dots colored by overall European Air Quality Index.
+  </p>
+</div>
+
+<div id="station-data" data-stations={stationsJson} aria-hidden="true" style="display:none"></div>
+
+<script is:inline>
+  (function() {
+    var mapEl = document.getElementById("aqi-map");
+    if (!mapEl) return;
+
+    var dataEl = document.getElementById("station-data");
+    var stations;
+
+    try { stations = JSON.parse(dataEl.getAttribute("data-stations")); }
+    catch(e) { stations = []; }
+
+    if (stations.length === 0) {
+      mapEl.innerHTML = '<div class="flex items-center justify-center h-full bg-gray-100 text-gray-500"><p>No station data available.</p></div>';
+      return;
+    }
+
+    function initMap() {
+      if (typeof L === "undefined") { setTimeout(initMap, 100); return; }
+
+      var skeleton = document.getElementById("map-skeleton");
+      if (skeleton) skeleton.style.display = "none";
+
+      var map = L.map(mapEl, {
+        center: [53.35, -7.5],
+        zoom: 7,
+        zoomControl: true,
+        attributionControl: true,
+        keyboard: true,
+      });
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18,
+      }).addTo(map);
+
+      var bounds = L.latLngBounds([]);
+
+      stations.forEach(function(s) {
+        var popupHtml = [
+          '<div style="min-width:180px;font-family:system-ui,sans-serif;">',
+          '<strong style="font-size:14px">' + s.station.StationName + '</strong>',
+          '<div style="margin:4px 0;font-size:12px;color:#666;text-transform:capitalize">',
+          s.station.StationType + ' &middot; ' + s.station.StationArea,
+          '</div>',
+          '<hr style="margin:4px 0;border:none;border-top:1px solid #eee">',
+          s.measurements.map(function(m) {
+            return '<div style="display:flex;justify-content:space-between;font-size:13px;padding:1px 0"><span><strong>' + m.Pollutant + '</strong></span><span>' + m.Value.toFixed(1) + ' ' + m.Unit + '</span></div>';
+          }).join(""),
+          '<hr style="margin:4px 0;border:none;border-top:1px solid #eee">',
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;font-size:12px">',
+          '<span style="display:inline-flex;align-items:center;gap:4px">',
+          '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + s.aqiColor + '"></span>',
+          'AQI: <strong style="color:' + s.aqiColor + '">' + s.aqiLabel + '</strong>',
+          '</span>',
+          '<a href="/station/' + s.station.AirQualityStationEoICode + '/" style="color:#1d4ed8;text-decoration:underline;font-size:11px">View details</a>',
+          '</div>',
+          '<div style="font-size:10px;color:#999;margin-top:2px">' + s.lastUpdated + '</div>',
+          '</div>'
+        ].join("");
+
+        var marker = L.circleMarker([s.station.Latitude, s.station.Longitude], {
+          radius: 8,
+          fillColor: s.aqiColor,
+          color: "#fff",
+          weight: 2,
+          fillOpacity: 0.8,
+        }).addTo(map);
+
+        marker.bindPopup(popupHtml, { maxWidth: 300, closeButton: true });
+        marker.bindTooltip(s.station.StationName, { direction: "top", offset: [0, -8] });
+        bounds.extend([s.station.Latitude, s.station.Longitude]);
+      });
+
+      if (stations.length > 0) {
+        map.fitBounds(bounds, { padding: [30, 30], maxZoom: 10 });
+      }
+
+      mapEl.style.height = "500px";
+      window.dispatchEvent(new Event("resize"));
+    }
+
+    initMap();
+  })();
+</script>

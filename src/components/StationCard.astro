@@ -1,0 +1,55 @@
+---
+import type { StationCurrentData, Pollutant } from "../lib/types";
+import AqiBadge from "./AqiBadge.astro";
+import StationTypeBadge from "./StationTypeBadge.astro";
+import { POLLUTANT_NAMES } from "../lib/labels";
+import { getAqiForPollutant } from "../lib/aqi";
+import { formatRelativeTime } from "../lib/format";
+
+export interface Props {
+  data: StationCurrentData;
+  compact?: boolean;
+}
+
+const { data, compact = false } = Astro.props;
+const { station, measurements, aqi, aqiLabel, aqiColor, dominantPollutant, lastUpdated } = data;
+---
+
+<article class="station-card" aria-label={`Station: ${station.StationName}`}>
+  <div class="flex items-start justify-between gap-2 mb-2">
+    <div>
+      <h3 class="font-semibold text-base">
+        <a href={`/station/${station.AirQualityStationEoICode}/`} class="hover:text-blue-700 transition-colors">
+          {station.StationName}
+        </a>
+      </h3>
+      <div class="flex flex-wrap gap-1.5 mt-1">
+        <StationTypeBadge type={station.StationType} area={station.StationArea} />
+      </div>
+    </div>
+    <AqiBadge index={aqi} label={aqiLabel} color={aqiColor} />
+  </div>
+
+  {measurements.length > 0 && (
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-3" role="list" aria-label="Pollutant readings">
+      {measurements.map((m) => {
+        const info = getAqiForPollutant(m.Pollutant as Pollutant, m.Value);
+        return (
+          <div class="text-sm" role="listitem">
+            <span class="text-gray-500">{m.Pollutant}</span>
+            <div class="flex items-center gap-1">
+              <span class="aqi-indicator" style={`background-color: ${info.color}`} aria-hidden="true"></span>
+              <span>{m.Value.toFixed(1)}</span>
+              <span class="text-gray-400" set:html={m.Unit.replace("µ", "&micro;").replace("³", "&sup3;")}></span>
+              <span class="sr-only">Air Quality: {info.label}</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  )}
+
+  <div class="mt-2 text-xs text-gray-400">
+    <time datetime={lastUpdated} title={lastUpdated}>Updated: {formatRelativeTime(lastUpdated)}</time>
+  </div>
+</article>

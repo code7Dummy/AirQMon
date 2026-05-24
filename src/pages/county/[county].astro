@@ -1,0 +1,60 @@
+---
+import DataPageLayout from "../../layouts/DataPageLayout.astro";
+import StationCard from "../../components/StationCard.astro";
+import AqiBadge from "../../components/AqiBadge.astro";
+import type { StationCurrentData } from "../../lib/types";
+
+export async function getStaticPaths() {
+  return [{ params: { county: "dublin" }, props: { countyName: "Dublin", stations: [] as StationCurrentData[] } }];
+}
+
+const { countyName, stations } = Astro.props;
+const dominantPollutants = [...new Set(stations.flatMap((s) => s.measurements.map((m) => m.Pollutant)))];
+const averageAqi = stations.length > 0 ? Math.round(stations.reduce((sum, s) => sum + s.aqi, 0) / stations.length) : 0;
+---
+
+<DataPageLayout title={`${countyName} — Air Quality Overview`} description={`Air quality readings for ${countyName}. View all monitoring stations and current conditions.`}>
+  <div class="space-y-6">
+    <section aria-labelledby="county-summary" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <h2 id="county-summary" class="sr-only">County summary</h2>
+      <div class="bg-blue-50 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold text-blue-700">{stations.length}</div>
+        <div class="text-sm text-blue-600">Stations</div>
+      </div>
+      <div class="bg-amber-50 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold text-amber-700">{averageAqi}</div>
+        <div class="text-sm text-amber-600">Average AQI</div>
+      </div>
+      <div class="bg-green-50 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold text-green-700">{dominantPollutants.length}</div>
+        <div class="text-sm text-green-600">Pollutants Measured</div>
+      </div>
+    </section>
+
+    {dominantPollutants.length > 0 && (
+      <section aria-labelledby="pollutants-heading" class="station-card">
+        <h2 id="pollutants-heading" class="font-semibold mb-2">Pollutants Measured in {countyName}</h2>
+        <div class="flex flex-wrap gap-2">
+          {dominantPollutants.map((p) => (
+            <a href={`/pollutant/${p.toLowerCase()}/`} class="px-3 py-1 bg-gray-100 rounded-full text-sm hover:bg-gray-200 transition-colors">
+              {p}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section aria-labelledby="stations-heading">
+      <h2 id="stations-heading" class="text-xl font-bold mb-4">Stations in {countyName}</h2>
+      {stations.length > 0 ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {stations.map((s) => (
+            <StationCard data={s} />
+          ))}
+        </div>
+      ) : (
+        <p class="text-gray-500 italic">County station data will appear once the data pipeline is operational.</p>
+      )}
+    </section>
+  </div>
+</DataPageLayout>

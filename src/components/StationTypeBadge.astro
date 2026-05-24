@@ -1,0 +1,24 @@
+---
+import { STATION_TYPE_LABELS, STATION_AREA_LABELS } from "../lib/labels";
+import type { StationType, StationArea } from "../lib/types";
+
+export interface Props {
+  type: StationType;
+  area: StationArea;
+}
+
+const { type, area } = Astro.props;
+
+const typeColors: Record<StationType, { bg: string; text: string; dot: string }> = {
+  background: { bg: "#e0f2fe", text: "#0369a1", dot: "#0ea5e9" },
+  traffic: { bg: "#fef3c7", text: "#92400e", dot: "#f59e0b" },
+  industrial: { bg: "#fce4ec", text: "#9a031e", dot: "#e11d48" },
+};
+const t = typeColors[type];
+---
+
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium" style={`background-color: ${t.bg}; color: ${t.text};`}>
+  <span class="inline-block w-2 h-2 rounded-full" style={`background-color: ${t.dot};`} aria-hidden="true"></span>
+  <span>{STATION_TYPE_LABELS[type] || type}</span>
+  <span class="sr-only">, {STATION_AREA_LABELS[area] || area}</span>
+</div>

@@ -1,0 +1,116 @@
+---
+import type { Pollutant } from "../lib/types";
+import { POLLUTANT_NAMES } from "../lib/labels";
+
+export interface Props {
+  pollutant: Pollutant;
+  data: Array<{ date: string; value: number }>;
+  euLimit?: number;
+  days?: number;
+}
+
+const { pollutant, data, euLimit, days = 30 } = Astro.props;
+const dataJson = JSON.stringify(data);
+const chartId = `chart-${pollutant.toLowerCase().replace(/[^a-z0-9]/g, "")}-${days}d`;
+const pollutantLabel = POLLUTANT_NAMES[pollutant] || pollutant;
+---
+
+<div class="space-y-2">
+  <div class="flex items-center justify-between">
+    <h4 class="text-sm font-semibold">{pollutantLabel}</h4>
+    <span class="text-xs text-gray-400">{days}-day trend</span>
+  </div>
+  <div class="relative bg-white rounded border border-gray-200 p-2">
+    <canvas id={chartId} data-chart-id={chartId} data-values={dataJson} class="w-full" style="height:200px" role="img" aria-label={`Trend chart of ${pollutantLabel} over ${days} days`}></canvas>
+  </div>
+  <details class="text-xs text-gray-500">
+    <summary class="cursor-pointer hover:text-gray-700">View data table</summary>
+    <table class="data-table mt-1" aria-label={`${pollutantLabel} data points`}>
+      <caption class="sr-only">{pollutantLabel} daily values</caption>
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Value ({data.length > 0 ? data[0]?.unit || "&micro;g/m&sup3;" : "&micro;g/m&sup3;"})</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.slice(-30).reverse().map((d) => (
+          <tr>
+            <td>{d.date}</td>
+            <td>{d.value.toFixed(1)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </details>
+</div>
+
+<script>
+  (async () => {
+    const Chart = (await import("chart.js")).default;
+    const { registerables } = await import("chart.js");
+    Chart.register(...registerables);
+
+    const canvas = document.querySelector("[data-chart-id]");
+    if (!canvas || !(canvas instanceof HTMLCanvasElement)) return;
+
+    const chartId = canvas.getAttribute("data-chart-id") || "";
+    const rawData = canvas.getAttribute("data-values") || "[]";
+    const data = JSON.parse(rawData);
+    if (!canvas || data.length === 0) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const textColor = isDark ? "#ccc" : "#666";
+
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: data.map((d) => d.date),
+        datasets: [{
+          label: chartId.replace("chart-", "").replace(/-.*$/, "").toUpperCase(),
+          data: data.map((d) => d.value),
+          borderColor: "#2563eb",
+          backgroundColor: "rgba(37, 99, 235, 0.1)",
+          fill: true,
+          tension: 0.3,
+          pointRadius: 2,
+          pointHoverRadius: 5,
+          spanGaps: true,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.parsed.y.toFixed(1)} µg/m³`,
+            },
+          },
+        },
+        scales: {
+          x: {
+            type: "time",
+            time: { unit: "day", displayFormats: { day: "MMM d" } },
+            ticks: { color: textColor, maxTicksLimit: 8 },
+            grid: { display: false },
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { color: textColor },
+            grid: { color: isDark ? "#333" : "#e5e7eb" },
+          },
+        },
+        interaction: {
+          mode: "nearest",
+          axis: "x",
+          intersect: false,
+        },
+      },
+    });
+  })();
+</script>

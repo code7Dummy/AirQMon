@@ -1,0 +1,35 @@
+---
+export interface Props {
+  index: number;
+  label: string;
+  color: string;
+  value?: number;
+  unit?: string;
+  pollutant?: string;
+  showLabel?: boolean;
+}
+
+const { index, label, color, value, unit, pollutant, showLabel = true } = Astro.props;
+---
+
+<span class="aqi-badge" style={`background-color: ${color}20; border: 1px solid ${color}40;`} role="status">
+  <span class="aqi-indicator" style={`background-color: ${color};`} aria-hidden="true"></span>
+  {showLabel && (
+    <span>
+      <span class="sr-only">Air Quality Index: {label}. Level {index} of 6.</span>
+      <span aria-hidden="true">{label}</span>
+    </span>
+  )}
+  {value !== undefined && unit && (
+    <span class="text-gray-600 font-normal">
+      <span class="sr-only">Concentration: </span>
+      {value.toFixed(1)} <span set:html={unit.replace("µ", "&micro;").replace("³", "&sup3;")}></span>
+    </span>
+  )}
+  {value !== undefined && !unit && (
+    <span class="text-gray-600 font-normal">
+      <span class="sr-only">Concentration: </span>
+      {value.toFixed(1)} &micro;g/m&sup3;
+    </span>
+  )}
+</span>

@@ -1,0 +1,56 @@
+name: Build and Deploy
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python deps
+        run: pip install polars pyarrow requests
+
+      - name: Fetch E2a data (last 48h)
+        run: python scripts/fetch_e2a.py
+        env:
+          EEA_API_URL: https://eeadmz1-downloads-api-appservice.azurewebsites.net
+
+      - name: Validate and filter
+        run: python scripts/validate.py
+
+      - name: Generate page data
+        run: python scripts/generate_pages.py
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Node deps
+        run: npm ci
+
+      - name: Build Astro site
+        run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ireland-air-quality
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

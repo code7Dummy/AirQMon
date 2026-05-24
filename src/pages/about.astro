@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="About" description="About Ireland Air Quality Monitor — purpose, audience, licensing, and contact details.">
+  <div class="container-main py-8 max-w-3xl space-y-8">
+    <h1 class="text-3xl font-bold tracking-tight">About</h1>
+
+    <section aria-labelledby="purpose-heading">
+      <h2 id="purpose-heading" class="text-xl font-bold mb-3">Purpose</h2>
+      <p class="text-gray-700">
+        Ireland Air Quality Monitor provides accessible, up-to-date air quality information for residents, outdoor workers, parents, and individuals with respiratory conditions. By combining data from the European Environment Agency (EEA) and the Environmental Protection Agency (EPA) Ireland, we present air quality readings in a clear, actionable format.
+      </p>
+    </section>
+
+    <section aria-labelledby="who-heading">
+      <h2 id="who-heading" class="text-xl font-bold mb-3">Who This Is For</h2>
+      <ul class="list-disc list-inside space-y-1 text-gray-700">
+        <li><strong>Irish residents</strong> checking local air quality before planning outdoor activities</li>
+        <li><strong>Outdoor workers</strong> monitoring conditions for health and safety planning</li>
+        <li><strong>Parents</strong> concerned about children's exposure to air pollution</li>
+        <li><strong>Asthma patients</strong> and individuals with respiratory conditions tracking air quality</li>
+        <li><strong>Researchers</strong> and students studying air quality patterns</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="how-heading">
+      <h2 id="how-heading" class="text-xl font-bold mb-3">How It Works</h2>
+      <p class="text-gray-700">
+        Every 6 hours, our automated pipeline fetches the latest air quality data from the EEA Air Quality e-Reporting system. Data is validated, filtered, and processed into a static website deployed to Cloudflare Pages. No database or server is required at runtime — the site is entirely pre-built HTML, CSS, and JavaScript.
+      </p>
+    </section>
+
+    <section aria-labelledby="license-heading">
+      <h2 id="license-heading" class="text-xl font-bold mb-3">Data License and Reuse</h2>
+      <p class="text-gray-700">
+        Air quality data is provided by the European Environment Agency under the EEA data policy and by the EPA Ireland under the Irish PSI (Public Sector Information) Licence. You may reuse this data for any purpose, including commercial use, provided you acknowledge the sources:
+      </p>
+      <blockquote class="border-l-4 border-gray-300 pl-4 italic text-gray-600 my-3">
+        "Air quality data from the European Environment Agency (EEA) Air Quality e-Reporting system and the Environmental Protection Agency (EPA) Ireland."
+      </blockquote>
+    </section>
+
+    <section aria-labelledby="contact-heading">
+      <h2 id="contact-heading" class="text-xl font-bold mb-3">Contact</h2>
+      <p class="text-gray-700">
+        For questions about the data, please contact the <a href="https://www.epa.ie/" class="text-blue-600 underline">EPA Ireland</a> or the <a href="https://www.eea.europa.eu/" class="text-blue-600 underline">European Environment Agency</a>.
+      </p>
+      <p class="text-gray-700 mt-2">
+        For technical issues with this website, please open an issue on our GitHub repository.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

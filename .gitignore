@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.local
+*.pyc
+__pycache__/
+.DS_Store
+*.parquet
+src/data/raw_e2a.parquet
+src/data/validated.parquet
+src/data/stations.parquet
+src/data/*.json
+!src/data/current.json
+public/sitemap.xml
+!.gitkeep

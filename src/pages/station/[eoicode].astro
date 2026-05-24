@@ -1,0 +1,219 @@
+---
+import DataPageLayout from "../../layouts/DataPageLayout.astro";
+import AqiBadge from "../../components/AqiBadge.astro";
+import AqiLegend from "../../components/AqiLegend.astro";
+import StationTypeBadge from "../../components/StationTypeBadge.astro";
+import HealthAdvice from "../../components/HealthAdvice.astro";
+import TrendChart from "../../components/TrendChart.astro";
+import type { StationCurrentData } from "../../lib/types";
+import { STATION_AREA_LABELS, POLLUTANT_NAMES, VERIFICATION_LABELS } from "../../lib/labels";
+import { getPollutantInfo } from "../../lib/aqi";
+import { formatRelativeTime } from "../../lib/format";
+
+export async function getStaticPaths() {
+  let stations: StationCurrentData[] = [];
+  try {
+    const mod = await import("../../data/current.json");
+    stations = (mod.default || mod).stations || [];
+  } catch {
+    // no data
+  }
+
+  if (stations.length === 0) {
+    return [{ params: { eoicode: "placeholder" }, props: { stationData: null } }];
+  }
+
+  return stations.map((s) => ({
+    params: { eoicode: s.station.AirQualityStationEoICode },
+    props: { stationData: s },
+  }));
+}
+
+const { stationData } = Astro.props;
+
+const hasData = stationData !== null && stationData !== undefined;
+
+let station, measurements, aqi, aqiLabel, aqiColor, dominantPollutant, lastUpdated;
+let structuredData = null;
+let measurementCards: any[] = [];
+
+if (hasData) {
+  station = stationData.station;
+  measurements = stationData.measurements;
+  aqi = stationData.aqi;
+  aqiLabel = stationData.aqiLabel;
+  aqiColor = stationData.aqiColor;
+  dominantPollutant = stationData.dominantPollutant;
+  lastUpdated = stationData.lastUpdated;
+
+  measurementCards = measurements.map((m) => {
+    const info = getPollutantInfo(m.Pollutant);
+    const band = info?.bands.find((b) => m.Value >= b.range[0] && m.Value < b.range[1]);
+    const withinLimit = info ? m.Value <= info.euAnnualLimit : true;
+    return { m, info, band, withinLimit };
+  });
+
+  structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: `Air Quality Readings - ${station.StationName}`,
+    description: `Real-time air quality measurements from ${station.StationName}, a ${station.StationType} monitoring station in ${station.StationArea} area of Ireland.`,
+    spatial: {
+      "@type": "Place",
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: station.Latitude,
+        longitude: station.Longitude,
+      },
+    },
+    temporalCoverage: lastUpdated,
+    measurementTechnique: "EEA Air Quality e-Reporting",
+  };
+}
+---
+
+{hasData ? (
+  <DataPageLayout title={`${station.StationName} — Air Quality Readings`} description={`Real-time and historical air quality data for ${station.StationName}. Current AQI: ${aqiLabel}.`} lastUpdated={lastUpdated}>
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+    )}
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-6">
+        <section aria-labelledby="current-readings">
+          <h2 id="current-readings" class="text-lg font-bold mb-3">Current Readings</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" role="list" aria-label="Current pollutant readings">
+            {measurementCards.map(({ m, info, band, withinLimit }) => (
+              <div class="station-card" role="listitem">
+                <div class="flex items-center justify-between">
+                  <h3 class="font-semibold text-sm">{POLLUTANT_NAMES[m.Pollutant] || m.Pollutant}</h3>
+                  {band && (
+                    <span class="aqi-indicator" style={`background-color: ${band.color}`} aria-label={`AQI: ${band.label}`}></span>
+                  )}
+                </div>
+                <p class="text-2xl font-bold mt-1">
+                  {m.Value.toFixed(1)}
+                  <span class="text-base font-normal text-gray-500 ml-1" set:html={m.Unit.replace("µ", "&micro;").replace("³", "&sup3;")}></span>
+                </p>
+                <div class="flex flex-wrap gap-2 mt-1 text-xs">
+                  {info && (
+                    <span class={withinLimit ? "text-green-600" : "text-red-600"}>
+                      {withinLimit ? "Within" : "Exceeds"} EU annual limit ({info.euAnnualLimit} {info.unit})
+                    </span>
+                  )}
+                </div>
+                <div class="mt-1 text-xs text-gray-400">
+                  <span>{VERIFICATION_LABELS[m.Verification] || `Verification: ${m.Verification}`}</span>
+                  {m.Validity === 1 && <span> &middot; Confirmed reading</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+          {measurements.length === 0 && (
+            <p class="text-gray-500 italic">No current readings available for this station.</p>
+          )}
+        </section>
+
+        <section aria-labelledby="trends-heading">
+          <h2 id="trends-heading" class="text-lg font-bold mb-3">7-Day Trend (Daily Means)</h2>
+          <div class="space-y-4">
+            {["PM2.5", "PM10", "NO2", "O3"].filter((p) => measurements.some((m) => m.Pollutant === p)).map((p) => (
+              <TrendChart pollutant={p} data={[]} days={7} />
+            ))}
+          </div>
+          <p class="text-xs text-gray-400 mt-2">Data shown is daily averages with Validity=1 only. Gaps may indicate maintenance or seasonal downtime.</p>
+        </section>
+
+        <section aria-labelledby="monthly-trend">
+          <h2 id="monthly-trend" class="text-lg font-bold mb-3">30-Day Trend</h2>
+          <div class="space-y-4">
+            {["PM2.5", "PM10", "NO2", "O3"].filter((p) => measurements.some((m) => m.Pollutant === p)).map((p) => (
+              <TrendChart pollutant={p} data={[]} days={30} />
+            ))}
+          </div>
+        </section>
+
+        <HealthAdvice aqiIndex={aqi} aqiLabel={aqiLabel} aqiColor={aqiColor} />
+      </div>
+
+      <aside class="space-y-6" aria-label="Station information">
+        <section class="station-card" aria-labelledby="station-info">
+          <h2 id="station-info" class="text-lg font-bold mb-3">Station Information</h2>
+          <dl class="space-y-3 text-sm">
+            <div>
+              <dt class="text-gray-500 text-xs uppercase tracking-wide">Name</dt>
+              <dd class="font-medium">{station.StationName}</dd>
+            </div>
+            <div>
+              <dt class="text-gray-500 text-xs uppercase tracking-wide">Type</dt>
+              <dd><StationTypeBadge type={station.StationType} area={station.StationArea} /></dd>
+            </div>
+            <div>
+              <dt class="text-gray-500 text-xs uppercase tracking-wide">Area</dt>
+              <dd>{STATION_AREA_LABELS[station.StationArea] || station.StationArea}</dd>
+            </div>
+            <div>
+              <dt class="text-gray-500 text-xs uppercase tracking-wide">Coordinates</dt>
+              <dd class="font-mono text-xs">{station.Latitude.toFixed(4)}&deg;N, {station.Longitude.toFixed(4)}&deg;W</dd>
+            </div>
+            {station.Altitude !== null && (
+              <div>
+                <dt class="text-gray-500 text-xs uppercase tracking-wide">Altitude</dt>
+                <dd>{station.Altitude}m</dd>
+              </div>
+            )}
+            <div>
+              <dt class="text-gray-500 text-xs uppercase tracking-wide">EoI Code</dt>
+              <dd class="font-mono text-xs">{station.AirQualityStationEoICode}</dd>
+            </div>
+            {station.CITY_NAME && (
+              <div>
+                <dt class="text-gray-500 text-xs uppercase tracking-wide">City</dt>
+                <dd>{station.CITY_NAME}</dd>
+              </div>
+            )}
+            {station.NUTS3 && (
+              <div>
+                <dt class="text-gray-500 text-xs uppercase tracking-wide">NUTS3 Region</dt>
+                <dd>{station.NUTS3}</dd>
+              </div>
+            )}
+            {station.DataCapture !== null && (
+              <div>
+                <dt class="text-gray-500 text-xs uppercase tracking-wide">Data completeness</dt>
+                <dd>{station.DataCapture.toFixed(1)}%</dd>
+              </div>
+            )}
+          </dl>
+        </section>
+
+        <section class="station-card" aria-labelledby="aqi-summary">
+          <h2 id="aqi-summary" class="text-lg font-bold mb-3">Current AQI</h2>
+          <div class="flex items-center gap-3">
+            <span class="aqi-indicator" style={`background-color: ${aqiColor}; width: 16px; height: 16px;`}></span>
+            <div>
+              <p class="font-bold text-lg">{aqiLabel}</p>
+              <p class="text-sm text-gray-500">Index {aqi} of 6</p>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">Dominant pollutant: {POLLUTANT_NAMES[dominantPollutant] || dominantPollutant}</p>
+          <p class="text-xs text-gray-400 mt-2">Updated: <time datetime={lastUpdated} title={lastUpdated}>{formatRelativeTime(lastUpdated)}</time></p>
+        </section>
+
+        <section class="station-card">
+          <AqiLegend />
+        </section>
+
+        <section class="station-card" aria-labelledby="data-source">
+          <h2 id="data-source" class="font-semibold text-sm mb-2">Data Source</h2>
+          <p class="text-xs text-gray-500">Readings from EEA Air Quality e-Reporting (E2a dataset). Real-time unverified data.</p>
+          <p class="text-xs text-gray-500 mt-1">Station metadata from EPA Ireland and EEA.</p>
+        </section>
+      </aside>
+    </div>
+  </DataPageLayout>
+) : (
+  <DataPageLayout title="Station Not Found" description="This station could not be found.">
+    <p class="text-gray-500">Station data is not yet available.</p>
+  </DataPageLayout>
+)}

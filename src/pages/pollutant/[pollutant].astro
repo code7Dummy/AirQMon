@@ -1,0 +1,104 @@
+---
+import DataPageLayout from "../../layouts/DataPageLayout.astro";
+import { POLLUTANT_NAMES, POLLUTANT_HEALTH_INFO } from "../../lib/labels";
+import { getPollutantInfo } from "../../lib/aqi";
+import type { Pollutant } from "../../lib/types";
+
+export async function getStaticPaths() {
+  const validPollutants: Pollutant[] = ["PM10", "PM2.5", "NO2", "O3", "SO2", "CO", "C6H6", "BaP"];
+  return validPollutants.map((p) => ({
+    params: { pollutant: p.toLowerCase().replace(/\./g, "") },
+    props: { pollutant: p },
+  }));
+}
+
+const validPollutants: Pollutant[] = ["PM10", "PM2.5", "NO2", "O3", "SO2", "CO", "C6H6", "BaP"];
+
+const { pollutant } = Astro.props;
+const info = getPollutantInfo(pollutant);
+const name = POLLUTANT_NAMES[pollutant] || pollutant;
+const healthInfo = POLLUTANT_HEALTH_INFO[pollutant] || "No specific health information available.";
+---
+
+<DataPageLayout title={`${name} — Air Quality Information`} description={`Learn about ${name}, its health effects, EU/WHO limits, and current levels across Ireland.`}>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+      <section aria-labelledby="overview-heading" class="station-card">
+        <h2 id="overview-heading" class="text-xl font-bold mb-2">{name}</h2>
+        <p class="text-gray-700">{healthInfo}</p>
+      </section>
+
+      {info && (
+        <section aria-labelledby="limits-heading" class="station-card">
+          <h2 id="limits-heading" class="text-lg font-bold mb-3">EU & WHO Limits</h2>
+          <dl class="grid grid-cols-2 gap-4 text-sm">
+            <div class="bg-gray-50 rounded p-3">
+              <dt class="text-gray-500 text-xs uppercase tracking-wide">EU Annual Limit</dt>
+              <dd class="text-xl font-bold mt-1">{info.euAnnualLimit} {info.unit}</dd>
+              <dd class="text-xs text-gray-500 mt-0.5">Ambient Air Quality Directives (2024)</dd>
+            </div>
+            <div class="bg-gray-50 rounded p-3">
+              <dt class="text-gray-500 text-xs uppercase tracking-wide">WHO Guideline</dt>
+              <dd class="text-xl font-bold mt-1">{info.whoGuideline} {info.unit}</dd>
+              <dd class="text-xs text-gray-500 mt-0.5">WHO Air Quality Guidelines (2021)</dd>
+            </div>
+          </dl>
+        </section>
+      )}
+
+      <section aria-labelledby="aqi-bands-heading" class="station-card">
+        <h2 id="aqi-bands-heading" class="text-lg font-bold mb-3">European AQI Bands — {pollutant}</h2>
+        {info && (
+          <div class="overflow-x-auto">
+            <table class="data-table text-sm" aria-label={`AQI threshold table for ${pollutant}`}>
+              <thead>
+                <tr>
+                  <th>Index</th>
+                  <th>Label</th>
+                  <th>Range ({info.unit})</th>
+                  <th class="sr-only">Color</th>
+                </tr>
+              </thead>
+              <tbody>
+                {info.bands.map((b) => (
+                  <tr style={`background: ${b.color}20`}>
+                    <td>{b.index}</td>
+                    <td>{b.label}</td>
+                    <td>{b.range[1] === Infinity ? `>${b.range[0]}` : `${b.range[0]}–${b.range[1]}`}</td>
+                    <td><span class="inline-block w-4 h-4 rounded" style={`background: ${b.color}`} aria-hidden="true"></span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+    </div>
+
+    <aside class="space-y-4" aria-label="Related information">
+      <div class="station-card">
+        <h3 class="font-semibold mb-2">Irish Trend (Annual)</h3>
+        <p class="text-sm text-gray-500">Annual average trend chart using E1a verified data (2013–2023) will appear here once the historical data pipeline is configured.</p>
+      </div>
+
+      <div class="station-card">
+        <h3 class="font-semibold mb-2">Related Pollutants</h3>
+        <div class="flex flex-wrap gap-1.5">
+          {validPollutants.filter((p) => p !== pollutant).map((p) => (
+            <a
+              href={`/pollutant/${p.toLowerCase().replace(/\./g, "")}/`}
+              class="px-2 py-1 bg-gray-100 rounded text-xs hover:bg-gray-200 transition-colors"
+            >
+              {p}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="station-card">
+        <h3 class="font-semibold mb-2">Data Source</h3>
+        <p class="text-xs text-gray-500">E1a verified data from EEA Air Quality e-Reporting. Annual statistics require &ge;75% data capture.</p>
+      </div>
+    </aside>
+  </div>
+</DataPageLayout>

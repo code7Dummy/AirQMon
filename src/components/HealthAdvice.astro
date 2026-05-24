@@ -1,0 +1,31 @@
+---
+import { AQI_HEALTH_ADVICE } from "../lib/labels";
+import type { AqiIndex } from "../lib/types";
+
+export interface Props {
+  aqiIndex: number;
+  aqiLabel: string;
+  aqiColor: string;
+}
+
+const { aqiIndex, aqiLabel, aqiColor } = Astro.props;
+const advice = AQI_HEALTH_ADVICE[aqiIndex as AqiIndex] || AQI_HEALTH_ADVICE[1];
+---
+
+<section aria-label="Health advice" class="border rounded-lg p-4" style={`border-color: ${aqiColor}40;`}>
+  <h3 class="font-semibold mb-2 flex items-center gap-2">
+    <span class="aqi-indicator" style={`background-color: ${aqiColor}`} aria-hidden="true"></span>
+    Health Advice — Current: {aqiLabel}
+  </h3>
+  <div class="space-y-2 text-sm">
+    {advice && (
+      <>
+        <p><strong>General population:</strong> {advice.general}</p>
+        <p><strong>Sensitive groups:</strong> {advice.sensitive}</p>
+      </>
+    )}
+  </div>
+  <p class="mt-2 text-xs text-gray-400">
+    Sensitive groups include children, older adults, pregnant people, and those with respiratory or cardiovascular conditions.
+  </p>
+</section>

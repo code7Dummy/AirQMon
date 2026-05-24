@@ -1,0 +1,85 @@
+---
+import DataPageLayout from "../layouts/DataPageLayout.astro";
+import CurrentConditionsMap from "../components/CurrentConditionsMap.astro";
+import StationCard from "../components/StationCard.astro";
+import AqiLegend from "../components/AqiLegend.astro";
+import type { StationCurrentData } from "../lib/types";
+import { formatRelativeTime } from "../lib/format";
+
+let stations: StationCurrentData[] = [];
+let lastUpdated = "";
+let buildTimestamp = "";
+
+try {
+  const mod = await import("../data/current.json");
+  const data = mod.default || mod;
+  stations = data.stations || [];
+  lastUpdated = data.lastUpdated || "";
+  buildTimestamp = data.buildTimestamp || "";
+} catch {
+  // No data generated yet
+}
+
+const totalStations = stations.length;
+const reportingNow = stations.filter((s) => s.measurements.length > 0).length;
+const goodCount = stations.filter((s) => s.aqi === 1).length;
+const fairCount = stations.filter((s) => s.aqi === 2).length;
+const moderateCount = stations.filter((s) => s.aqi === 3).length;
+const poorPlus = stations.filter((s) => s.aqi >= 4).length;
+---
+
+<DataPageLayout title="Current Air Quality — Ireland" description="Real-time air quality readings across Ireland. Map and list view of all active monitoring stations with European Air Quality Index." lastUpdated={lastUpdated} buildTimestamp={buildTimestamp}>
+  <div class="space-y-8">
+    <section aria-labelledby="map-heading">
+      <h2 id="map-heading" class="sr-only">Air quality map of Ireland</h2>
+      <CurrentConditionsMap stations={stations} />
+    </section>
+
+    <section aria-labelledby="summary-heading" class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+      <h2 id="summary-heading" class="sr-only">Summary statistics</h2>
+      <div class="rounded-lg p-3 text-center bg-blue-50">
+        <div class="text-2xl font-bold text-blue-700">{totalStations}</div>
+        <div class="text-xs text-blue-600">Active Stations</div>
+      </div>
+      <div class="rounded-lg p-3 text-center bg-green-50">
+        <div class="text-2xl font-bold text-green-700">{reportingNow}</div>
+        <div class="text-xs text-green-600">Reporting Now</div>
+      </div>
+      <div class="rounded-lg p-3 text-center" style="background-color: #50f0e620">
+        <div class="text-2xl font-bold" style="color: #0a6e65">{goodCount}</div>
+        <div class="text-xs" style="color: #0a6e65">Good AQI</div>
+      </div>
+      <div class="rounded-lg p-3 text-center" style="background-color: #50ccaa20">
+        <div class="text-2xl font-bold" style="color: #1a6b52">{fairCount}</div>
+        <div class="text-xs" style="color: #1a6b52">Fair AQI</div>
+      </div>
+      <div class="rounded-lg p-3 text-center" style="background-color: #ff505020">
+        <div class="text-2xl font-bold" style="color: #7a0a0a">{poorPlus}</div>
+        <div class="text-xs" style="color: #7a0a0a">Poor+ AQI</div>
+      </div>
+    </section>
+
+    <AqiLegend />
+
+    <section aria-labelledby="stations-heading">
+      <div class="flex items-center justify-between mb-4">
+        <h2 id="stations-heading" class="text-xl font-bold">Monitoring Stations</h2>
+        <span class="text-sm text-gray-500">{totalStations} stations</span>
+      </div>
+      {stations.length > 0 ? (
+        <div id="station-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" role="list">
+          {stations.map((s) => (
+            <div role="listitem" key={s.station.AirQualityStationEoICode}>
+              <StationCard data={s} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12 text-gray-500 border border-dashed border-gray-300 rounded-lg">
+          <p class="text-lg font-medium">No station data available</p>
+          <p class="text-sm mt-1">Data will appear once the data pipeline runs. See <a href="/methodology/" class="text-blue-600 underline">Methodology</a> for details.</p>
+        </div>
+      )}
+    </section>
+  </div>
+</DataPageLayout>

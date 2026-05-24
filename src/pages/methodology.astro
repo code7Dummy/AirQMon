@@ -1,0 +1,157 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { REFRESH_INTERVAL_HOURS } from "../lib/constants";
+
+const faqData = [
+  {
+    question: "Where does the air quality data come from?",
+    answer: "Data is sourced from the European Environment Agency (EEA) Air Quality e-Reporting system. National monitoring networks (including the EPA Ireland) report measurements to the EEA, which publishes them through the Download Service API. We also use station metadata from the EPA Ireland station registry.",
+  },
+  {
+    question: "What is the difference between E1a and E2a data?",
+    answer: "E1a (dataset=1) contains verified annual data from 2013-2023. This data has passed quality assurance and is suitable for compliance checking against EU air quality standards. E2a (dataset=2) contains up-to-date, unverified data from 2024 onwards. It provides near-real-time readings but has not undergone formal verification. We display E2a data for current conditions with a 'preliminary' badge, and use E1a for annual statistics.",
+  },
+  {
+    question: "What do validity flags mean?",
+    answer: "Each measurement includes a validity flag: 1 = 'Confirmed reading' (valid measurement), 2 = 'Trace amount below sensor threshold', 3 = 'Estimated trace amount', -1 = 'Reading unavailable', -99 = 'Station maintenance'. Only Validity=1 measurements are used in our calculations.",
+  },
+  {
+    question: "What do verification flags mean?",
+    answer: "Verification flags indicate the quality assurance status: 1 = 'Official verified data' (fully quality-assured), 2 = 'Preliminary check passed' (basic validation done), 3 = 'Real-time, not yet verified' (raw measurement awaiting checks). Current conditions show Verification=3 data marked as preliminary.",
+  },
+  {
+    question: "Why are some stations excluded from annual averages?",
+    answer: "For annual statistics, we require DataCapture >= 75%. This means the station must have reported valid measurements for at least 75% of the year. Stations below this threshold are excluded to prevent biased averages. Stations with low data capture are still shown in current conditions with a data completeness badge.",
+  },
+  {
+    question: "How is the European Air Quality Index calculated?",
+    answer: "The EEA AQI (2024 update) classifies air quality into 6 bands from 'Good' (1) to 'Extremely Poor' (6). The overall index is determined by the worst-performing pollutant. Each pollutant has specific concentration thresholds for each band. For example, PM2.5 below 10 µg/m³ is 'Good', while above 75 µg/m³ is 'Extremely Poor'. Color coding helps visual identification, but text labels and AQI numbers are provided as primary indicators.",
+  },
+  {
+    question: "What EU annual limit values are used for comparison?",
+    answer: "The current EU annual limit values used: PM2.5 = 5 µg/m³, PM10 = 20 µg/m³, NO2 = 10 µg/m³, O3 = 120 µg/m³ (target value), SO2 = 20 µg/m³. These are from the EU Ambient Air Quality Directives. WHO guidelines are generally stricter.",
+  },
+];
+
+const steps = [
+  { step: 1, title: "Fetch", description: "Every 6 hours, our pipeline downloads the latest E2a parquet files from the EEA Download Service API, filtered for Irish stations and key pollutants (PM10, PM2.5, NO2, O3, SO2)." },
+  { step: 2, title: "Validate", description: "Raw data undergoes validation: only Validity=1 measurements pass, units are checked for µg/m³ compliance, timestamps are verified for freshness (48-hour window), and spatial coordinates are validated." },
+  { step: 3, title: "Deduplicate", description: "Stations are deduplicated by their EoI code combined with station type and area classification, ensuring each unique monitoring location appears once." },
+  { step: 4, title: "Calculate AQI", description: "The European Air Quality Index is computed for each pollutant at every station. The overall station AQI is the maximum (worst) index across all measured pollutants." },
+  { step: 5, title: "Generate Pages", description: "Station data is serialized to JSON. Astro builds static HTML pages for the dashboard, each station, and information pages." },
+  { step: 6, title: "Deploy", description: "Generated site is deployed to Cloudflare Pages for fast global delivery." },
+];
+---
+
+<BaseLayout title="Methodology" description="How Ireland Air Quality Monitor collects, validates, and displays air quality data from the EEA and EPA Ireland.">
+  <div class="container-main py-8 max-w-3xl space-y-10">
+    <h1 class="text-3xl font-bold tracking-tight">Methodology</h1>
+    <p class="text-gray-600">How air quality data is collected, validated, and displayed on this site.</p>
+
+    <section aria-labelledby="pipeline-heading">
+      <h2 id="pipeline-heading" class="text-xl font-bold mb-4">Data Pipeline</h2>
+      <div class="space-y-4">
+        {steps.map((s) => (
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm">
+              {s.step}
+            </div>
+            <div>
+              <h3 class="font-semibold">{s.title}</h3>
+              <p class="text-sm text-gray-600">{s.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p class="text-sm text-gray-500 mt-4">The entire pipeline runs via GitHub Actions every {REFRESH_INTERVAL_HOURS} hours and on-demand.</p>
+    </section>
+
+    <section aria-labelledby="data-sources-heading">
+      <h2 id="data-sources-heading" class="text-xl font-bold mb-3">Data Sources</h2>
+      <ul class="list-disc list-inside space-y-2 text-sm text-gray-700">
+        <li><strong>EEA Air Quality e-Reporting (E2a):</strong> https://eeadmz1-downloads-api-appservice.azurewebsites.net — Real-time unverified measurements</li>
+        <li><strong>EEA Air Quality e-Reporting (E1a):</strong> Verified annual data (2013-2023)</li>
+        <li><strong>EPA Ireland:</strong> Station metadata and Irish national monitoring network</li>
+        <li><strong>Zenodo:</strong> https://zenodo.org/records/14513586 — Pre-aggregated dataset (2015-2023) for bootstrap and historical context</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="validation-heading">
+      <h2 id="validation-heading" class="text-xl font-bold mb-3">Validation Rules</h2>
+      <p class="text-sm text-gray-700 mb-3">Before any data is displayed:</p>
+      <ol class="list-decimal list-inside space-y-1 text-sm text-gray-700">
+        <li>Validity flag must equal 1 (confirmed reading)</li>
+        <li>Units must be µg/m³ (or mg/m³ for CO)</li>
+        <li>Timestamps must be within the last 48 hours</li>
+        <li>Stations deduplicated by EoICode + Type + Area</li>
+        <li>Verification status preserved and displayed</li>
+        <li>Annual averages require DataCapture &ge; 75%</li>
+        <li>Different station types are not aggregated together</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="aqi-heading">
+      <h2 id="aqi-heading" class="text-xl font-bold mb-3">European Air Quality Index (2024)</h2>
+      <p class="text-sm text-gray-700 mb-3">The EEA AQI classifies air quality into 6 levels, from Good (1) to Extremely Poor (6). The overall index is determined by the worst single pollutant reading.</p>
+
+      <div class="overflow-x-auto">
+        <table class="data-table text-sm" aria-label="AQI band thresholds by pollutant">
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Label</th>
+              <th>PM2.5 (µg/m³)</th>
+              <th>PM10 (µg/m³)</th>
+              <th>NO2 (µg/m³)</th>
+              <th>O3 (µg/m³)</th>
+              <th class="sr-only">Color</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: #50f0e620"><td>1</td><td>Good</td><td>0–10</td><td>0–20</td><td>0–40</td><td>0–50</td><td><span class="inline-block w-4 h-4 rounded" style="background:#50f0e6" aria-hidden="true"></span></td></tr>
+            <tr style="background: #50ccaa20"><td>2</td><td>Fair</td><td>10–20</td><td>20–40</td><td>40–90</td><td>50–100</td><td><span class="inline-block w-4 h-4 rounded" style="background:#50ccaa" aria-hidden="true"></span></td></tr>
+            <tr style="background: #f0e64120"><td>3</td><td>Moderate</td><td>20–25</td><td>40–50</td><td>90–120</td><td>100–130</td><td><span class="inline-block w-4 h-4 rounded" style="background:#f0e641" aria-hidden="true"></span></td></tr>
+            <tr style="background: #ff505020"><td>4</td><td>Poor</td><td>25–50</td><td>50–100</td><td>120–230</td><td>130–240</td><td><span class="inline-block w-4 h-4 rounded" style="background:#ff5050" aria-hidden="true"></span></td></tr>
+            <tr style="background: #96003220"><td>5</td><td>Very Poor</td><td>50–75</td><td>100–150</td><td>230–340</td><td>240–380</td><td><span class="inline-block w-4 h-4 rounded" style="background:#960032" aria-hidden="true"></span></td></tr>
+            <tr style="background: #7d218120"><td>6</td><td>Extremely Poor</td><td>&gt;75</td><td>&gt;150</td><td>&gt;340</td><td>&gt;380</td><td><span class="inline-block w-4 h-4 rounded" style="background:#7d2181" aria-hidden="true"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="limitations-heading">
+      <h2 id="limitations-heading" class="text-xl font-bold mb-3">Limitations</h2>
+      <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
+        <li>Current conditions show preliminary (E2a) data that may be revised</li>
+        <li>Not all pollutants are measured at every station</li>
+        <li>Seasonal gaps can occur (especially rural stations in winter)</li>
+        <li>PM2.5 measurements may be model-estimated where direct monitoring is unavailable</li>
+        <li>Some small towns lack nearby monitoring stations</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="faq-heading">
+      <h2 id="faq-heading" class="text-xl font-bold mb-4">Frequently Asked Questions</h2>
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqData.map((f) => ({
+          "@type": "Question",
+          name: f.question,
+          acceptedAnswer: { "@type": "Answer", text: f.answer },
+        })),
+      })}>
+      </script>
+      <div class="space-y-4">
+        {faqData.map((faq) => (
+          <details class="border border-gray-200 rounded-lg">
+            <summary class="px-4 py-3 font-medium text-sm cursor-pointer hover:bg-gray-50 rounded-lg">{faq.question}</summary>
+            <div class="px-4 pb-3 text-sm text-gray-600">
+              <p>{faq.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

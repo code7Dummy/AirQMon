@@ -1,0 +1,44 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import DisclaimerBanner from "../components/DisclaimerBanner.astro";
+import { REFRESH_INTERVAL_HOURS } from "../lib/constants";
+import { formatTimestamp } from "../lib/format";
+
+export interface Props {
+  title: string;
+  description: string;
+  lastUpdated?: string;
+  buildTimestamp?: string;
+  noIndex?: boolean;
+}
+
+const { title, description, lastUpdated, buildTimestamp, noIndex } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} {noIndex}>
+  <div class="container-main py-6 space-y-6">
+    <DisclaimerBanner />
+
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <h1 class="text-2xl font-bold tracking-tight">{title}</h1>
+      <div class="text-right">
+        {lastUpdated && (
+          <p class="text-sm text-gray-500">
+            Data: <time datetime={lastUpdated}>{formatTimestamp(lastUpdated)}</time>
+          </p>
+        )}
+        {buildTimestamp && (
+          <p class="text-xs text-gray-400">
+            Site built: {formatTimestamp(buildTimestamp)}
+          </p>
+        )}
+      </div>
+    </div>
+
+    <p class="text-sm text-gray-500">
+      Data refreshes every {REFRESH_INTERVAL_HOURS} hours from the EEA Air Quality e-Reporting system.
+    </p>
+
+    <slot />
+  </div>
+</BaseLayout>

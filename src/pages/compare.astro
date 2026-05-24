@@ -1,0 +1,46 @@
+---
+import DataPageLayout from "../layouts/DataPageLayout.astro";
+import StationCard from "../components/StationCard.astro";
+import type { StationCurrentData } from "../lib/types";
+
+let stations: StationCurrentData[] = [];
+try {
+  const mod = await import("../data/current.json");
+  stations = (mod.default || mod).stations || [];
+} catch {
+  // no data
+}
+---
+
+<DataPageLayout title="Compare Stations" description="Compare air quality readings across multiple monitoring stations side-by-side.">
+  <div class="space-y-6">
+    <section aria-labelledby="howto-heading" class="disclaimer-banner">
+      <h2 id="howto-heading" class="font-semibold mb-1">How to Compare Stations</h2>
+      <p class="text-sm">Add station EoI codes as URL parameters: <code class="bg-amber-100 px-1 rounded">?s=IE001&s=IE002</code>. Only stations of the same type (e.g., both background) should be compared for fair analysis.</p>
+    </section>
+
+    {stations.length > 0 ? (
+      <section aria-labelledby="stations-heading">
+        <h2 id="stations-heading" class="text-xl font-bold mb-4">All Stations — Select for Comparison</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {stations.map((s) => (
+            <div class="relative">
+              <StationCard data={s} />
+              <a
+                href={`?s=${s.station.AirQualityStationEoICode}`}
+                class="absolute top-2 right-2 px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium hover:bg-blue-200 transition-colors"
+                aria-label={`Select ${s.station.StationName} for comparison`}
+              >
+                Select
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+    ) : (
+      <div class="text-center py-12 text-gray-500 border border-dashed border-gray-300 rounded-lg">
+        <p class="text-lg font-medium">Station comparison will be available once data is loaded.</p>
+      </div>
+    )}
+  </div>
+</DataPageLayout>

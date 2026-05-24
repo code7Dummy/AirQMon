@@ -1,0 +1,96 @@
+---
+import "../styles/global.css";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../lib/constants";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noIndex?: boolean;
+}
+
+const { title, description, image, noIndex } = Astro.props;
+const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
+const pageDesc = description || SITE_DESCRIPTION;
+---
+
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    {noIndex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={Astro.url} />
+
+    <link rel="preconnect" href="https://eeadmz1-downloads-api-appservice.azurewebsites.net" />
+    <link rel="preconnect" href="https://tile.openstreetmap.org" />
+
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    {image && <meta property="og:image" content={image} />}
+
+    {pageDesc && <meta name="twitter:card" content="summary" />}
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDesc} />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: SITE_TITLE,
+      url: "https://airquality.epa.ie",
+      description: SITE_DESCRIPTION,
+    })}>
+    </script>
+  </head>
+  <body class="flex flex-col min-h-full">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="bg-white border-b border-gray-200" role="banner">
+      <div class="container-main flex items-center justify-between h-16">
+        <a href="/" class="flex items-center gap-2 font-semibold text-lg hover:text-blue-700 transition-colors">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="2"/>
+            <circle cx="14" cy="14" r="4" fill="currentColor"/>
+          </svg>
+          <span>Air Quality Ireland</span>
+        </a>
+
+        <nav aria-label="Main navigation" class="flex items-center gap-6">
+          <a href="/" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Dashboard</a>
+          <a href="/methodology/" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Methodology</a>
+          <a href="/about/" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content" class="flex-1" role="main">
+      <slot />
+    </main>
+
+    <footer class="bg-gray-50 border-t border-gray-200 mt-12" role="contentinfo">
+      <div class="container-main py-8 space-y-4">
+        <div class="disclaimer-banner">
+          <p class="text-sm">
+            <strong>Data disclaimer:</strong> Air quality data from the European Environment Agency (EEA) Air Quality e-Reporting system and the Environmental Protection Agency (EPA) Ireland. Real-time data is unverified and subject to revision.
+          </p>
+          <p class="text-sm mt-1">
+            <strong>Medical disclaimer:</strong> This site is for informational purposes only and does not provide medical or legal advice. For health concerns, consult a medical professional.
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-sm text-gray-500">
+          <p>&copy; {new Date().getFullYear()} Ireland Air Quality Monitor. Data: EEA and EPA Ireland.</p>
+          <nav aria-label="Footer navigation" class="flex gap-4">
+            <a href="/methodology/" class="hover:text-gray-700 underline underline-offset-2">Methodology</a>
+            <a href="/about/" class="hover:text-gray-700 underline underline-offset-2">About</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
