@@ -1,28 +1,26 @@
-import type { APIRoute } from "astro";
-
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
-  try {
-    const body = await request.json();
-    const email = typeof body?.email === "string" ? body.email.trim() : "";
+export async function POST({ request }) {
+  const { email } = await request.json();
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return new Response(JSON.stringify({ error: "Invalid email address" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    console.log(`[Newsletter] Subscribe: ${email}`);
-    return new Response(JSON.stringify({ ok: true }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch {
-    return new Response(JSON.stringify({ error: "Invalid request" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return new Response(JSON.stringify({ ok: false, error: "Invalid email" }), { status: 400 });
   }
-};
+
+  const API_KEY = import.meta.env.BUTTONDOWN_API_KEY;
+
+  const res = await fetch("https://api.buttondown.email/v1/subscribers", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Token ${API_KEY}`
+    },
+    body: JSON.stringify({ email })
+  });
+
+  if (!res.ok) {
+    return new Response(JSON.stringify({ ok: false, error: "Buttondown error" }), { status: 500 });
+  }
+
+  return new Response(JSON.stringify({ ok: true }));
+}
