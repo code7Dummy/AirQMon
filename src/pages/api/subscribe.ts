@@ -1,14 +1,16 @@
 // Cloudflare Pages redeploy trigger
 export const prerender = false;
 
-export async function POST({ request }) {
+export async function POST({ request, locals }) {
   const { email } = await request.json();
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return new Response(JSON.stringify({ ok: false, error: "Invalid email" }), { status: 400 });
   }
 
-  const API_KEY = import.meta.env.BUTTONDOWN_API_KEY;
+  const env = locals.runtime.env;
+  const API_KEY = env.BUTTONDOWN_API_KEY;
+  console.log("API key loaded:", Boolean(API_KEY));
 
   const res = await fetch("https://api.buttondown.email/v1/subscribers", {
     method: "POST",
