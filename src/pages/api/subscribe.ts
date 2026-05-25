@@ -1,15 +1,16 @@
+import { env } from "cloudflare:workers";
+
 export const prerender = false;
 
-export async function POST({ request, locals }) {
+export async function POST({ request }) {
   const { email } = await request.json();
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return new Response(JSON.stringify({ ok: false, error: "Invalid email" }), { status: 400 });
   }
 
-  const env = locals.runtime.env;
-  console.log("Available env keys:", Object.keys(locals.runtime.env));
-  console.log("API key loaded:", Boolean(locals.runtime.env.BUTTONDOWN_API_KEY));
+  console.log("Available env keys:", Object.keys(env));
+  console.log("API key loaded:", Boolean(env.BUTTONDOWN_API_KEY));
   const API_KEY = env.BUTTONDOWN_API_KEY;
 
   const res = await fetch("https://api.buttondown.email/v1/subscribers", {
