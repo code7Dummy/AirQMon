@@ -16,7 +16,7 @@ export async function POST({ request }) {
       "Content-Type": "application/json",
       "Authorization": `Token ${API_KEY}`
     },
-    body: JSON.stringify({ email_address: email })
+    body: JSON.stringify({ email: email })
   });
 
   const errBody = await res.json().catch(() => ({}));
