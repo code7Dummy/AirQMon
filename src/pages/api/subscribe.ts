@@ -1,4 +1,3 @@
-// Cloudflare Pages redeploy trigger
 export const prerender = false;
 
 export async function POST({ request, locals }) {
@@ -9,8 +8,9 @@ export async function POST({ request, locals }) {
   }
 
   const env = locals.runtime.env;
+  console.log("Available env keys:", Object.keys(locals.runtime.env));
+  console.log("API key loaded:", Boolean(locals.runtime.env.BUTTONDOWN_API_KEY));
   const API_KEY = env.BUTTONDOWN_API_KEY;
-  console.log("API key loaded:", Boolean(API_KEY));
 
   const res = await fetch("https://api.buttondown.email/v1/subscribers", {
     method: "POST",
