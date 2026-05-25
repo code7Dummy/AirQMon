@@ -1,3 +1,4 @@
+// Cloudflare Pages redeploy trigger
 export const prerender = false;
 
 export async function POST({ request }) {
