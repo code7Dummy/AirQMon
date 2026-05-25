@@ -6,6 +6,7 @@ import StationTypeBadge from "../../components/StationTypeBadge.astro";
 import HealthAdvice from "../../components/HealthAdvice.astro";
 import TrendChart from "../../components/TrendChart.astro";
 import type { StationCurrentData } from "../../lib/types";
+import { SITE_URL } from "../../lib/constants";
 import { STATION_AREA_LABELS, POLLUTANT_NAMES, VERIFICATION_LABELS } from "../../lib/labels";
 import { getPollutantInfo } from "../../lib/aqi";
 import { formatRelativeTime } from "../../lib/format";
@@ -53,7 +54,7 @@ if (hasData) {
     return { m, info, band, withinLimit };
   });
 
-  const siteUrl = "https://airquality.epa.ie";
+  const siteUrl = SITE_URL;
   structuredData = {
     "@context": "https://schema.org",
     "@graph": [

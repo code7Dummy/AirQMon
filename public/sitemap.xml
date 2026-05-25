@@ -2,19 +2,64 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://airquality.epa.ie/</loc>
+    <loc>https://airqmon.code7dummy.workers.dev/</loc>
     <priority>1.0</priority>
     <changefreq>hourly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en-IE" href="https://airquality.epa.ie/"/>
+    <xhtml:link rel="alternate" hreflang="en-IE" href="https://airqmon.code7dummy.workers.dev/"/>
   </url>
   <url>
-    <loc>https://airquality.epa.ie/methodology/</loc>
+    <loc>https://airqmon.code7dummy.workers.dev/methodology/</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://airquality.epa.ie/about/</loc>
+    <loc>https://airqmon.code7dummy.workers.dev/about/</loc>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://airqmon.code7dummy.workers.dev/how-aqi-works/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://airqmon.code7dummy.workers.dev/pollutant/pm25/</loc>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://airqmon.code7dummy.workers.dev/pollutant/pm10/</loc>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://airqmon.code7dummy.workers.dev/pollutant/no2/</loc>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://airqmon.code7dummy.workers.dev/pollutant/o3/</loc>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://airqmon.code7dummy.workers.dev/pollutant/so2/</loc>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://airqmon.code7dummy.workers.dev/pollutant/co/</loc>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://airqmon.code7dummy.workers.dev/pollutant/c6h6/</loc>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://airqmon.code7dummy.workers.dev/pollutant/bap/</loc>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
   </url>
 </urlset>

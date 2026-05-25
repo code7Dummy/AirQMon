@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /compare/
 
-Sitemap: https://airquality.epa.ie/sitemap.xml
+Sitemap: https://airqmon.code7dummy.workers.dev/sitemap.xml

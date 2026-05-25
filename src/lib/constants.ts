@@ -1,3 +1,4 @@
+export const SITE_URL = "https://airqmon.code7dummy.workers.dev";
 export const SITE_TITLE = "Air Quality Ireland — Live AQI, PM2.5, PM10, Pollution Levels";
 export const SITE_DESCRIPTION =
   "Real-time air quality data for Ireland. Live AQI, PM2.5, PM10, NO2, O3 and pollution levels from official monitoring stations. Updated hourly.";

@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import cloudflare from "@astrojs/cloudflare";
 
 export default defineConfig({
-  site: "https://airquality.epa.ie",
+  site: "https://airqmon.code7dummy.workers.dev",
   integrations: [],
 
   vite: {
