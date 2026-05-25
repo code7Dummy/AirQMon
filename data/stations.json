@@ -1,0 +1,650 @@
+{
+  "IE0001R": {
+    "StationName": "Valentia",
+    "Latitude": 51.93852948,
+    "Longitude": -10.24008813,
+    "StationType": "background",
+    "StationArea": "rural",
+    "Elevation": null,
+    "CITY_NAME": "Valentia"
+  },
+  "IE001AP": {
+    "StationName": "Davitt Road",
+    "Latitude": 53.33625848,
+    "Longitude": -6.3090021,
+    "StationType": "traffic",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Davitt Road"
+  },
+  "IE001BP": {
+    "StationName": "Cork South Link Road",
+    "Latitude": 51.87853296,
+    "Longitude": -8.46493738,
+    "StationType": "traffic",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Cork South Link Road"
+  },
+  "IE001CM": {
+    "StationName": "Portlaoise",
+    "Latitude": 53.03613948,
+    "Longitude": -7.28880811,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Portlaoise"
+  },
+  "IE001DM": {
+    "StationName": "Enniscorthy",
+    "Latitude": 52.50049048,
+    "Longitude": -6.5703401,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Enniscorthy"
+  },
+  "IE001DP": {
+    "StationName": "Malin Head",
+    "Latitude": 55.37203647,
+    "Longitude": -7.33922412,
+    "StationType": "background",
+    "StationArea": "rural",
+    "Elevation": null,
+    "CITY_NAME": "Malin Head"
+  },
+  "IE001LM": {
+    "StationName": "IE001LM",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE001WD": {
+    "StationName": "IE001WD",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE0028A": {
+    "StationName": "Rathmines",
+    "Latitude": 53.32202948,
+    "Longitude": -6.2671541,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": "Rathmines"
+  },
+  "IE0029D": {
+    "StationName": "IE0029D",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE002AP": {
+    "StationName": "St Annes",
+    "Latitude": 53.37290448,
+    "Longitude": -6.1793901,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "St Annes"
+  },
+  "IE002BP": {
+    "StationName": "Bishopstown MTU",
+    "Latitude": 51.88411048,
+    "Longitude": -8.53319212,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Bishopstown MTU"
+  },
+  "IE002CM": {
+    "StationName": "Dundalk",
+    "Latitude": 54.00314148,
+    "Longitude": -6.3926111,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Dundalk"
+  },
+  "IE002DP": {
+    "StationName": "Roscommon Town",
+    "Latitude": 53.62997948,
+    "Longitude": -8.19465812,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Roscommon Town"
+  },
+  "IE002LH": {
+    "StationName": "IE002LH",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE002SO": {
+    "StationName": "IE002SO",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE0030D": {
+    "StationName": "IE0030D",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE0031R": {
+    "StationName": "Mace Head",
+    "Latitude": 53.32531148,
+    "Longitude": -9.90363413,
+    "StationType": "background",
+    "StationArea": "rural",
+    "Elevation": null,
+    "CITY_NAME": "Mace Head"
+  },
+  "IE0036A": {
+    "StationName": "Ballyfermot",
+    "Latitude": 53.34015948,
+    "Longitude": -6.3517061,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Ballyfermot"
+  },
+  "IE003AP": {
+    "StationName": "Finglas",
+    "Latitude": 53.39025248,
+    "Longitude": -6.3051621,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Finglas"
+  },
+  "IE003CP": {
+    "StationName": "Carlow Town",
+    "Latitude": 52.83975148,
+    "Longitude": -6.9319221,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Carlow Town"
+  },
+  "IE003DP": {
+    "StationName": "Carnsore Point",
+    "Latitude": 52.17312648,
+    "Longitude": -6.3636521,
+    "StationType": "background",
+    "StationArea": "rural",
+    "Elevation": null,
+    "CITY_NAME": "Carnsore Point"
+  },
+  "IE003WW": {
+    "StationName": "IE003WW",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE004AP": {
+    "StationName": "Ringsend",
+    "Latitude": 53.34193873,
+    "Longitude": -6.21411121,
+    "StationType": "traffic",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": "Ringsend"
+  },
+  "IE004BP": {
+    "StationName": "Cork UCC",
+    "Latitude": 51.90001848,
+    "Longitude": -8.48634311,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": "Cork UCC"
+  },
+  "IE004DP": {
+    "StationName": "Tipperary Town",
+    "Latitude": 52.47934048,
+    "Longitude": -8.15701411,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Tipperary Town"
+  },
+  "IE004KY": {
+    "StationName": "IE004KY",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE005AP": {
+    "StationName": "St John's Road West",
+    "Latitude": 53.34561648,
+    "Longitude": -6.2946921,
+    "StationType": "traffic",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": "St John's Road West"
+  },
+  "IE005CP": {
+    "StationName": "Brownes Road",
+    "Latitude": 52.24697548,
+    "Longitude": -7.1422951,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Brownes Road"
+  },
+  "IE005DP": {
+    "StationName": "Cobh",
+    "Latitude": 51.85505748,
+    "Longitude": -8.28782711,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Cobh"
+  },
+  "IE005OY": {
+    "StationName": "IE005OY",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE006AP": {
+    "StationName": "Pearse Street",
+    "Latitude": 53.34505348,
+    "Longitude": -6.2543441,
+    "StationType": "traffic",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": "Pearse Street"
+  },
+  "IE006CP": {
+    "StationName": "Letterkenny",
+    "Latitude": 54.95464447,
+    "Longitude": -7.73484212,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": "Letterkenny"
+  },
+  "IE006KE": {
+    "StationName": "IE006KE",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE007CP": {
+    "StationName": "Peoples Park",
+    "Latitude": 52.65865648,
+    "Longitude": -8.62873912,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Peoples Park"
+  },
+  "IE007DP": {
+    "StationName": "IE007DP",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE007GY": {
+    "StationName": "IE007GY",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE007KE": {
+    "StationName": "IE007KE",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE008CP": {
+    "StationName": "Navan",
+    "Latitude": 53.65548348,
+    "Longitude": -6.6884701,
+    "StationType": "traffic",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": "Navan"
+  },
+  "IE008DP": {
+    "StationName": "IE008DP",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE008GY": {
+    "StationName": "IE008GY",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE0090A": {
+    "StationName": "Kilkitt",
+    "Latitude": 54.08197448,
+    "Longitude": -6.88651011,
+    "StationType": "background",
+    "StationArea": "rural",
+    "Elevation": null,
+    "CITY_NAME": "Kilkitt"
+  },
+  "IE0095A": {
+    "StationName": "Phoenix Park",
+    "Latitude": 53.36464148,
+    "Longitude": -6.3480761,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Phoenix Park"
+  },
+  "IE0098A": {
+    "StationName": "Winetavern Street",
+    "Latitude": 53.34420148,
+    "Longitude": -6.2715631,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": "Winetavern Street"
+  },
+  "IE009CP": {
+    "StationName": "Tralee",
+    "Latitude": 52.26711548,
+    "Longitude": -9.69795813,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Tralee"
+  },
+  "IE009DP": {
+    "StationName": "IE009DP",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE009GY": {
+    "StationName": "IE009GY",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE0106A": {
+    "StationName": "Marino",
+    "Latitude": 53.36809848,
+    "Longitude": -6.2279401,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Marino"
+  },
+  "IE0108A": {
+    "StationName": "Shannon Estuary",
+    "Latitude": 52.63912798,
+    "Longitude": -8.95409843,
+    "StationType": "background",
+    "StationArea": "rural",
+    "Elevation": null,
+    "CITY_NAME": "Shannon Estuary"
+  },
+  "IE010CK": {
+    "StationName": "IE010CK",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE010CP": {
+    "StationName": "Clonmel",
+    "Latitude": 52.35468748,
+    "Longitude": -7.69961411,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Clonmel"
+  },
+  "IE010LK": {
+    "StationName": "IE010LK",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE0110A": {
+    "StationName": "Heatherton Park",
+    "Latitude": 51.88186748,
+    "Longitude": -8.45712912,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Heatherton Park"
+  },
+  "IE0111A": {
+    "StationName": "Emo Court",
+    "Latitude": 53.10761748,
+    "Longitude": -7.19831711,
+    "StationType": "background",
+    "StationArea": "rural",
+    "Elevation": null,
+    "CITY_NAME": "Emo Court"
+  },
+  "IE0118A": {
+    "StationName": "Castlebar",
+    "Latitude": 53.85104547,
+    "Longitude": -9.30029113,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Castlebar"
+  },
+  "IE011CP": {
+    "StationName": "Athlone",
+    "Latitude": 53.42432348,
+    "Longitude": -7.93737211,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Athlone"
+  },
+  "IE0127A": {
+    "StationName": "Clonskeagh",
+    "Latitude": 53.31178348,
+    "Longitude": -6.2353251,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Clonskeagh"
+  },
+  "IE012CK": {
+    "StationName": "IE012CK",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE012CP": {
+    "StationName": "IE012CP",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE0131A": {
+    "StationName": "Blanchardstown",
+    "Latitude": 53.38539048,
+    "Longitude": -6.3692111,
+    "StationType": "traffic",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Blanchardstown"
+  },
+  "IE0132A": {
+    "StationName": "Dun Laoghaire",
+    "Latitude": 53.28599448,
+    "Longitude": -6.1320031,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Dun Laoghaire"
+  },
+  "IE0136A": {
+    "StationName": "Tallaght",
+    "Latitude": 53.28069948,
+    "Longitude": -6.3588511,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Tallaght"
+  },
+  "IE0137A": {
+    "StationName": "Ennis",
+    "Latitude": 52.84320648,
+    "Longitude": -8.98933212,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Ennis"
+  },
+  "IE013CK": {
+    "StationName": "IE013CK",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE0140A": {
+    "StationName": "Swords",
+    "Latitude": 53.46306748,
+    "Longitude": -6.2222341,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Swords"
+  },
+  "IE0141A": {
+    "StationName": "Bray",
+    "Latitude": 53.18725148,
+    "Longitude": -6.1219641,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Bray"
+  },
+  "IE0142A": {
+    "StationName": "Longford\n",
+    "Latitude": 53.72555448,
+    "Longitude": -7.79127511,
+    "StationType": "traffic",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Longford"
+  },
+  "IE0145A": {
+    "StationName": "Claremorris",
+    "Latitude": 53.68660748,
+    "Longitude": -9.01340512,
+    "StationType": "background",
+    "StationArea": "rural",
+    "Elevation": null,
+    "CITY_NAME": "Claremorris"
+  },
+  "IE0147A": {
+    "StationName": "Kilkenny Seville Lodge",
+    "Latitude": 52.63832748,
+    "Longitude": -7.26760911,
+    "StationType": "background",
+    "StationArea": "suburban",
+    "Elevation": null,
+    "CITY_NAME": "Kilkenny Seville Lodge"
+  },
+  "IE015CK": {
+    "StationName": "IE015CK",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE027D": {
+    "StationName": "IE027D",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  },
+  "IE028D": {
+    "StationName": "IE028D",
+    "Latitude": null,
+    "Longitude": null,
+    "StationType": "background",
+    "StationArea": "urban",
+    "Elevation": null,
+    "CITY_NAME": ""
+  }
+}

@@ -21,12 +21,10 @@ jobs:
           python-version: '3.12'
 
       - name: Install Python deps
-        run: pip install polars pyarrow requests
+        run: pip install polars pyarrow requests airbase
 
-      - name: Fetch E2a data (last 48h)
+      - name: Fetch E2a data
         run: python scripts/fetch_e2a.py
-        env:
-          EEA_API_URL: https://eeadmz1-downloads-api-appservice.azurewebsites.net
 
       - name: Validate and filter
         run: python scripts/validate.py
@@ -51,6 +49,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ireland-air-quality
+          projectName: airqmon
           directory: dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
